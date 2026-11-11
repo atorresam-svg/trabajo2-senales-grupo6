@@ -1,17 +1,17 @@
-PROYECTO: CAUSALIDAD, MEMORIA Y ESTABILIDAD - SEÑALES Y SISTEMAS
+PROYECTO: CAUSALIDAD, MEMORIA Y ESTABILIDAD DE SISTEMAS
+
+Grupo 6 · Señales y Sistemas
+
+ALCANCE
+-------
+La presentación estudia tres criterios de clasificación: causalidad, memoria y estabilidad BIBO. Incluye un laboratorio interactivo para cambiar la propiedad, el sistema, la amplitud y el retardo, además de una diapositiva final de cierre. Linealidad e invariancia temporal corresponden al tema del grupo 7 y no forman parte de esta presentación.
 
 ESTRUCTURA
 ----------
-Trabajo2_CAUSALIDAD, MEMORIA Y ESTABILIDAD/
-  index.html
-  css/
-    estilos.css
-  js/
-    interacciones.js
+index.html
+css/estilos.css
+js/interacciones.js
 
 CÓMO EJECUTAR
 -------------
-1. Descomprime la carpeta.
-2. Abre la carpeta del proyecto en Visual Studio Code.
-3. Ejecuta index.html con Live Server.
-4. La presentación necesita conexión a Internet para cargar Reveal.js y MathJax desde CDN.
+Abre index.html con Visual Studio Code y Live Server. Se requiere conexión a Internet para cargar Reveal.js y MathJax desde sus CDN. Usa las flechas para navegar; si una diapositiva supera la altura de la pantalla, desplázate dentro de ella para leer el contenido completo.
