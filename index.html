@@ -13,6 +13,20 @@
         href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/theme/black.css">
 
     <link rel="stylesheet" href="css/estilos.css">
+    <style>
+        html:not(.presentacion-lista) .reveal { visibility: hidden; }
+        .aviso-carga {
+            position: fixed;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            background: #080d18;
+            color: #cbd5e1;
+            font: 16px Arial, sans-serif;
+            z-index: 10;
+        }
+        html.presentacion-lista .aviso-carga { display: none; }
+    </style>
 
     
     <script>
@@ -32,6 +46,7 @@
 
 <body>
 
+<div class="aviso-carga" role="status">Cargando presentación…</div>
 <div class="reveal">
     <div class="slides">
 
@@ -356,6 +371,20 @@
 
 <!-- INICIALIZACIÓN DE REVEAL.JS -->
 <script>
+    Reveal.on('ready', async () => {
+        if (document.readyState !== 'complete') {
+            await new Promise(resolve => window.addEventListener('load', resolve, { once: true }));
+        }
+        if (window.MathJax?.startup?.promise) {
+            await window.MathJax.startup.promise;
+        }
+        if (window.MathJax?.typesetPromise) {
+            await window.MathJax.typesetPromise();
+        }
+        Reveal.layout();
+        document.documentElement.classList.add('presentacion-lista');
+    });
+
     Reveal.initialize({
         hash: true,
         slideNumber: 'c / t',
