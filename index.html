@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Clasificación de Sistemas | Señales y Sistemas</title>
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/theme/black.css">
+
+    <link rel="stylesheet" href="css/estilos.css">
+
+    
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+
+<body>
+
+<div class="reveal">
+    <div class="slides">
+
+        <section>
+            <p class="etiqueta">SEÑALES Y SISTEMAS</p>
+            <h2>CLASIFICACIÓN DE SISTEMAS</h2>
+            <p class="etiqueta">Docente: Ph.D. Alexander B. Hilario Tacuri</p>
+            <div class="linea-decorativa"></div>
+               <ul>
+                <li>Caso Nuñez Alexander Johann</li>
+                <li>Larico Cueva Angel Benjamin</li>
+                <li>Torres Amau Arnold Bily</li>
+                <li>Parizaca Condori Michael Adbel</li>
+               </ul>
+            <p class="texto-secundario">Grupo 6 · Trabajo 2 · Ingeniería en Telecomunicaciones</p>
+        </section>
+
+        <section>
+            <h2>¿Qué es la linealidad?</h2>
+            <p>Un sistema es lineal cuando cumple el principio de superposición.</p>
+
+            <div class="bloque-ecuacion">
+                \[
+                y(t)=T\{x(t)\}
+                \]
+            </div>
+
+            <div class="diagrama">
+                <div class="nodo">x(t)</div>
+                <div class="flecha">→</div>
+                <div class="nodo sistema">T{·}</div>
+                <div class="flecha">→</div>
+                <div class="nodo">y(t)</div>
+            </div>
+
+            <p class="texto-secundario">
+                La salida debe responder proporcionalmente a las combinaciones de las entradas.
+            </p>
+        </section>
+
+
+        <section>
+            <h2>Condición 1: Aditividad</h2>
+            <p>
+                La respuesta a la suma de dos señales debe ser igual a la suma
+                de sus respuestas individuales.
+            </p>
+
+            \[
+            T\{x_1(t)+x_2(t)\}=T\{x_1(t)\}+T\{x_2(t)\}
+            \]
+
+            <div class="bloque-ejemplo">
+                <h4>Ejemplo: sistema T{x} = 2x</h4>
+                \[
+                x_1=1,\qquad x_2=2
+                \]
+                \[
+                T\{1+2\}=2(3)=6
+                \]
+                \[
+                T\{1\}+T\{2\}=2+4=6
+                \]
+                <p class="resultado correcto">✓ CUMPLE ADITIVIDAD</p>
+            </div>
+        </section>
+
+
+        <section>
+            <h2>Condición 2: Homogeneidad</h2>
+            <p>
+                Si multiplicamos la entrada por una constante, la salida también debe
+                multiplicarse por esa constante.
+            </p>
+
+            \[
+            T\{a x(t)\}=aT\{x(t)\}
+            \]
+
+            <div class="bloque-ejemplo">
+                <h4>Ejemplo: sistema T{x} = 2x</h4>
+                \[
+                x=3,\qquad a=2
+                \]
+                \[
+                T\{2(3)\}=T\{6\}=12
+                \]
+                \[
+                2T\{3\}=2(6)=12
+                \]
+                <p class="resultado correcto">✓ CUMPLE HOMOGENEIDAD</p>
+            </div>
+        </section>
+
+
+        <section>
+            <h2>Sistemas no lineales</h2>
+            <p>Son aquellos que no cumplen el principio de superposición.</p>
+
+            <div class="bloque-ejemplo">
+                <h4>Ejemplo: T{x} = x²</h4>
+                <p>Comprobación de aditividad:</p>
+                \[
+                T\{1+2\}=3^2=9
+                \]
+                \[
+                T\{1\}+T\{2\}=1^2+2^2=5
+                \]
+                <p class="resultado incorrecto">✗ 9 ≠ 5: NO CUMPLE ADITIVIDAD</p>
+            </div>
+
+            <p class="texto-secundario">
+                Basta con que falle una de las dos condiciones para que el sistema sea no lineal.
+            </p>
+        </section>
+
+        
+        <section>
+            <h2>EJEMPLO INTERACTIVO</h2>
+            <p>Comprueba la homogeneidad modificando la amplitud de entrada.</p>
+
+            <div class="panel-interactivo">
+                <label>
+                    Selecciona el sistema:
+                    <select id="tipoSistema">
+                        <option value="lineal">T(x) = 2x (Lineal)</option>
+                        <option value="noLineal" selected>T(x) = x² (No lineal)</option>
+                    </select>
+                </label>
+
+                <label>
+                    Amplitud de entrada:
+                    <span id="valorAmplitud">2</span>
+                    <input type="range" id="amplitud" min="0.5" max="3" step="0.5" value="2">
+                </label>
+            </div>
+
+            <canvas id="graficaLineal" width="900" height="300"></canvas>
+
+            <div class="leyenda">
+                <span class="leyenda-azul">● T{a·x(t)}</span>
+                <span class="leyenda-naranja">● a·T{x(t)}</span>
+            </div>
+
+            <h4 id="conclusion">Comprueba la homogeneidad</h4>
+            <p id="diferencia">Diferencia máxima: 0</p>
+            <p class="texto-secundario">
+                La comparación corresponde al valor de a seleccionado; prueba varios valores.
+            </p>
+        </section>
+
+
+        <section>
+            <h2>Conclusiones</h2>
+
+            <div class="bloque-ejemplo">
+                <h4>Sistema lineal</h4>
+                <p>
+                    Cumple aditividad y homogeneidad. Su comportamiento respeta
+                    el principio de superposición.
+                </p>
+            </div>
+
+            <div class="bloque-ejemplo">
+                <h4>Sistema no lineal</h4>
+                <p>
+                    No cumple al menos una de las dos propiedades.
+                    Puede presentar comportamientos más complejos.
+                </p>
+            </div>
+
+            <p class="texto-secundario">
+                La prueba de superposición permite determinar matemáticamente la linealidad de un sistema.
+            </p>
+        </section>
+
+
+
+        <section>
+            <h2>SISTEMAS INVARIANTES EN EL TIEMPO</h2>
+            <p>
+                Un sistema es invariante cuando su comportamiento no cambia
+                ante un desplazamiento temporal de la entrada.
+            </p>
+
+            <div class="bloque-ecuacion">
+                \[
+                T\{x(t-t_0)\}=y(t-t_0)
+                \]
+            </div>
+
+            <div class="bloque-ejemplo">
+                <h4>Ejemplo</h4>
+                \[
+                y(t)=x(t-2)
+                \]
+                <p>
+                    El sistema retrasa la señal 2 segundos. Al desplazar la entrada,
+                    la salida se desplaza exactamente de la misma manera.
+                </p>
+                <p class="resultado correcto">✓ SISTEMA INVARIANTE EN EL TIEMPO</p>
+            </div>
+        </section>
+
+     
+        <section>
+            <h2>SISTEMAS VARIANTES EN EL TIEMPO</h2>
+            <p>
+                Un sistema es variante cuando su comportamiento cambia
+                dependiendo del instante de tiempo.
+            </p>
+
+            <div class="bloque-ecuacion">
+                \[
+                T\{x(t-t_0)\}\neq y(t-t_0)
+                \]
+            </div>
+
+            <div class="bloque-ejemplo">
+                <h4>Ejemplo</h4>
+                \[
+                y(t)=t\,x(t)
+                \]
+                <p>Desplazando la entrada:</p>
+                \[
+                T\{x(t-t_0)\}=t\,x(t-t_0)
+                \]
+                <p>Desplazando la salida:</p>
+                \[
+                y(t-t_0)=(t-t_0)x(t-t_0)
+                \]
+                <p class="resultado incorrecto">✗ SISTEMA VARIANTE EN EL TIEMPO</p>
+            </div>
+        </section>
+
+
+        <section>
+            <h2>SISTEMAS CAUSALES</h2>
+            <p>La salida depende únicamente de los valores presentes y pasados de la señal de entrada.</p>
+
+            <div class="bloque-ecuacion">
+                \[
+                y(t)=x(t)+x(t-1)
+                \]
+            </div>
+
+            <div class="bloque-ejemplo">
+                <h4>Análisis</h4>
+                <p>La salida utiliza:</p>
+                <ul>
+                    <li>\(x(t)\): valor presente.</li>
+                    <li>\(x(t-1)\): valor pasado.</li>
+                </ul>
+                <p>No utiliza valores futuros de la entrada.</p>
+                <p class="resultado correcto">✓ SISTEMA CAUSAL</p>
+            </div>
+        </section>
+
+
+        <section>
+            <h2>SISTEMAS NO CAUSALES</h2>
+            <p>La salida depende de uno o más valores futuros de la señal de entrada.</p>
+
+            <div class="bloque-ecuacion">
+                \[
+                y(t)=x(t+1)
+                \]
+            </div>
+
+            <div class="bloque-ejemplo">
+                <h4>Análisis</h4>
+                <p>
+                    Para calcular la salida en el instante \(t\), se necesita conocer
+                    la entrada un segundo después.
+                </p>
+                \[
+                x(t+1):\text{valor futuro}
+                \]
+                <p class="resultado incorrecto">✗ SISTEMA NO CAUSAL</p>
+            </div>
+        </section>
+
+
+        <section>
+            <h2>SISTEMAS SIN MEMORIA</h2>
+            <p>
+                Un sistema es sin memoria cuando su salida en un instante depende
+                únicamente del valor actual de la entrada.
+            </p>
+
+            <div class="bloque-ecuacion">
+                \[
+                y(t)=T\{x(t)\}=f(x(t))
+                \]
+            </div>
+
+            <div class="bloque-ejemplo">
+                <h4>Ejemplo: Sistema sin memoria</h4>
+                \[
+                y(t)=3x(t)
+                \]
+                <p>La salida depende exclusivamente de la entrada en el mismo instante de tiempo.</p>
+                <p>No necesita valores pasados ni futuros de la señal.</p>
+                <p class="resultado correcto">✓ SISTEMA SIN MEMORIA</p>
+            </div>
+        </section>
+
+
+        <section>
+            <h2>SISTEMAS CON MEMORIA</h2>
+            <p>
+                Un sistema tiene memoria cuando su salida depende de valores de la entrada
+                correspondientes a otros instantes de tiempo.
+            </p>
+
+            <div class="bloque-ecuacion">
+                \[
+                y(t)=x(t)+x(t-1)
+                \]
+            </div>
+
+            <div class="bloque-ejemplo">
+                <h4>Ejemplo: Sistema con memoria</h4>
+                <p>La salida depende de:</p>
+                \[
+                x(t):\text{valor presente}
+                \]
+                \[
+                x(t-1):\text{valor pasado}
+                \]
+                <p>
+                    Para calcular la salida actual, el sistema necesita información
+                    de un instante anterior.
+                </p>
+                <p class="resultado correcto">✓ SISTEMA CON MEMORIA</p>
+            </div>
+        </section>
+
+
+        <section>
+            <h2>SISTEMAS ESTABLES</h2>
+            <p>Un sistema es estable BIBO si toda entrada acotada produce una salida también acotada.</p>
+
+            <div class="bloque-ecuacion">
+                \[
+                |x(t)|\leq M_x < \infty
+                \]
+                \[
+                \Downarrow
+                \]
+                \[
+                |y(t)|\leq M_y < \infty
+                \]
+            </div>
+
+            <div class="bloque-ejemplo">
+                <h4>Ejemplo: Sistema estable</h4>
+                \[
+                y(t)=2x(t)
+                \]
+                <p>Si la entrada está limitada por:</p>
+                \[
+                |x(t)|\leq 5
+                \]
+                <p>Entonces la salida cumple:</p>
+                \[
+                |y(t)|=|2x(t)|\leq 10
+                \]
+                <p class="resultado correcto">✓ SISTEMA ESTABLE</p>
+            </div>
+
+            <p class="texto-secundario">BIBO: entrada acotada, salida acotada.</p>
+        </section>
+
+   
+        <section>
+            <h2>SISTEMAS INESTABLES</h2>
+            <p>
+                Un sistema es inestable BIBO cuando existe al menos una entrada acotada
+                que produce una salida no acotada.
+            </p>
+
+            <div class="bloque-ecuacion">
+                \[
+                y(t)=t\,x(t)
+                \]
+            </div>
+
+            <div class="bloque-ejemplo">
+                <h4>Ejemplo: Sistema inestable</h4>
+                <p>Consideramos una entrada constante y acotada:</p>
+                \[
+                x(t)=1
+                \]
+                <p>La salida será:</p>
+                \[
+                y(t)=t(1)=t
+                \]
+                <p>A medida que el tiempo aumenta, la salida crece sin límite.</p>
+                <p class="resultado incorrecto">✗ SISTEMA INESTABLE</p>
+            </div>
+        </section>
+
+     
+        <section>
+            <h2>EJEMPLO: SISTEMA INVARIANTE EN EL TIEMPO</h2>
+            <p>Comprobamos si la salida conserva su forma cuando desplazamos la señal de entrada.</p>
+
+            <div class="formula-grafica">
+                \[
+                y(t)=x(t-1)
+                \]
+            </div>
+
+            <canvas id="graficaInvariante" class="grafica-clasificacion" width="1100" height="300"></canvas>
+
+            <div class="leyenda-grafica">
+                <span style="color:#38bdf8">━ T{x(t-2)}</span>
+                <span style="color:#fb923c">┄ y(t-2)</span>
+            </div>
+
+            <p class="explicacion-grafica">
+                Ambas señales coinciden porque el desplazamiento aplicado a la entrada
+                produce el mismo desplazamiento en la salida.
+            </p>
+            <p class="resultado correcto">✓ SISTEMA INVARIANTE EN EL TIEMPO</p>
+        </section>
+ 
+
+        <section>
+            <h2>EJEMPLO: SISTEMA VARIANTE EN EL TIEMPO</h2>
+            <p>Observamos cómo cambia la respuesta cuando desplazamos la señal de entrada.</p>
+
+            <div class="formula-grafica">
+                \[
+                y(t)=t\,x(t)
+                \]
+            </div>
+
+            <canvas id="graficaVariante" class="grafica-clasificacion" width="1100" height="300"></canvas>
+
+            <div class="leyenda-grafica">
+                <span style="color:#38bdf8">● T{x(t-2)}</span>
+                <span style="color:#fb923c">● y(t-2)</span>
+            </div>
+
+            <p class="explicacion-grafica">
+                Las señales no coinciden: el factor temporal modifica la respuesta
+                del sistema al desplazar la entrada.
+            </p>
+            <p class="resultado incorrecto">✗ SISTEMA VARIANTE EN EL TIEMPO</p>
+        </section>
+
+
+        <section>
+            <h2>EJEMPLO: SISTEMA CAUSAL</h2>
+            <p>Analizamos una salida que depende de los valores presentes y pasados de la entrada.</p>
+
+            <div class="formula-grafica">
+                \[
+                y(t)=x(t)+x(t-1)
+                \]
+            </div>
+
+            <canvas id="graficaCausal" class="grafica-clasificacion" width="1100" height="300"></canvas>
+
+            <div class="leyenda-grafica">
+                <span style="color:#38bdf8">● Entrada x(t)</span>
+                <span style="color:#fb923c">● Salida y(t)</span>
+            </div>
+
+            <p class="explicacion-grafica">
+                La salida utiliza la entrada actual y la entrada retrasada un segundo.
+                No necesita información futura.
+            </p>
+            <p class="resultado correcto">✓ SISTEMA CAUSAL</p>
+        </section>
+
+
+        <section>
+            <h2>EJEMPLO: SISTEMA NO CAUSAL</h2>
+            <p>Observamos un sistema cuya salida necesita conocer un valor futuro de la entrada.</p>
+
+            <div class="formula-grafica">
+                \[
+                y(t)=x(t+1)
+                \]
+            </div>
+
+            <canvas id="graficaNoCausal" class="grafica-clasificacion" width="1100" height="300"></canvas>
+
+            <div class="leyenda-grafica">
+                <span style="color:#38bdf8">● Entrada x(t)</span>
+                <span style="color:#fb923c">● Salida y(t)</span>
+            </div>
+
+            <p class="explicacion-grafica">
+                La salida aparece un segundo antes que la entrada, porque depende de
+                x(t+1), es decir, de un valor futuro.
+            </p>
+            <p class="resultado incorrecto">✗ SISTEMA NO CAUSAL</p>
+        </section>
+
+      
+        <section>
+            <h2>EJEMPLO: SISTEMA SIN MEMORIA</h2>
+            <p>Comprobamos un sistema cuya salida depende únicamente del valor actual de la entrada.</p>
+
+            <div class="formula-grafica">
+                \[
+                y(t)=2x(t)
+                \]
+            </div>
+
+            <canvas id="graficaSinMemoria" class="grafica-clasificacion" width="1100" height="300"></canvas>
+
+            <div class="leyenda-grafica">
+                <span style="color:#38bdf8">● Entrada x(t)</span>
+                <span style="color:#fb923c">● Salida y(t)</span>
+            </div>
+
+            <p class="explicacion-grafica">
+                La salida tiene el doble de amplitud que la entrada, pero conserva
+                el mismo intervalo temporal.
+            </p>
+            <p class="resultado correcto">✓ SISTEMA SIN MEMORIA</p>
+        </section>
+
+
+        <section>
+            <h2>EJEMPLO: SISTEMA CON MEMORIA</h2>
+            <p>Analizamos un sistema que utiliza información de un instante anterior.</p>
+
+            <div class="formula-grafica">
+                \[
+                y(t)=x(t)+x(t-1)
+                \]
+            </div>
+
+            <canvas id="graficaConMemoria" class="grafica-clasificacion" width="1100" height="300"></canvas>
+
+            <div class="leyenda-grafica">
+                <span style="color:#38bdf8">● Entrada x(t)</span>
+                <span style="color:#fb923c">● Salida y(t)</span>
+            </div>
+
+            <p class="explicacion-grafica">
+                La salida combina la entrada actual con una versión retrasada un segundo.
+                Por ello, depende del pasado.
+            </p>
+            <p class="resultado correcto">✓ SISTEMA CON MEMORIA</p>
+        </section>
+
+    </div>
+</div>
+
+<!-- LIBRERÍA REVEAL.JS -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
+
+<!-- INICIALIZACIÓN DE REVEAL.JS -->
+<script>
+    Reveal.initialize({
+        hash: true,
+        slideNumber: true,
+        transition: 'slide',
+        controls: true,
+        progress: true,
+        center: true,
+        width: 1280,
+        height: 720,
+        margin: 0.04,
+        minScale: 0.2,
+        maxScale: 2.0,
+        navigationMode: 'default',
+        overview: true
+    });
+</script>
+
+<!-- INTERACCIONES: SE CARGAN DESPUÉS DE REVEAL -->
+<script src="js/interacciones.js"></script>
+
+</body>
+</html>
