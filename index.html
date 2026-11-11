@@ -453,5 +453,36 @@
 <script src="js/interacciones.js"></script>
 
 </body>
+<script>
+(() => {
+    const version = '2026-11-11.1';
+    const key = 'presentacion-revision-pendiente';
+    let versionDetectada = '';
+    let detecciones = 0;
+    async function revisarVersion() {
+        if (document.hidden) return;
+        try {
+            const url = new URL('version.txt', window.location.href);
+            url.searchParams.set('check', Date.now());
+            const respuesta = await fetch(url, { cache: 'no-store' });
+            if (!respuesta.ok) return;
+            const publicada = (await respuesta.text()).trim();
+            if (!publicada || publicada === version) { versionDetectada = ''; detecciones = 0; sessionStorage.removeItem(key); return; }
+            if (publicada !== versionDetectada) { versionDetectada = publicada; detecciones = 1; return; }
+            detecciones += 1;
+            if (detecciones < 2) return;
+            const ultimoIntento = JSON.parse(sessionStorage.getItem(key) || 'null');
+            if (ultimoIntento?.version === publicada && Date.now() - ultimoIntento.time < 120000) return;
+            sessionStorage.setItem(key, JSON.stringify({ version: publicada, time: Date.now() }));
+            const paginaActualizada = new URL(window.location.href);
+            paginaActualizada.searchParams.set('actualizacion', Date.now());
+            window.location.replace(paginaActualizada.href);
+        } catch (error) {}
+    }
+    window.setTimeout(revisarVersion, 10000);
+    window.setInterval(revisarVersion, 45000);
+})();
+</script>
+
 </html>
 
