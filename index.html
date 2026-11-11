@@ -363,6 +363,53 @@
             <p class="resultado correcto">✓ SISTEMA CON MEMORIA</p>
         </section>
 
+        <section>
+            <h2>LABORATORIO INTERACTIVO</h2>
+            <p>Elige una propiedad y cambia los parámetros para observar cómo responde cada sistema.</p>
+
+            <div class="controles-laboratorio">
+                <label>Propiedad
+                    <select id="propiedadInteractiva">
+                        <option value="causalidad">Causalidad</option>
+                        <option value="memoria">Memoria</option>
+                        <option value="estabilidad">Estabilidad BIBO</option>
+                    </select>
+                </label>
+                <label>Sistema
+                    <select id="sistemaInteractivo"></select>
+                </label>
+                <label class="control-rango">Amplitud de entrada
+                    <span><output id="amplitudInteractivaValor">1</output>
+                    <input id="amplitudInteractiva" type="range" min="0.5" max="2" step="0.5" value="1"></span>
+                </label>
+                <label class="control-rango" id="controlRetardo">Retardo \(\tau\)
+                    <span><output id="retardoInteractivoValor">1</output>
+                    <input id="retardoInteractivo" type="range" min="0.5" max="2" step="0.5" value="1"></span>
+                </label>
+            </div>
+
+            <p id="formulaInteractiva" class="formula-grafica"></p>
+            <canvas id="graficaInteractiva" class="grafica-clasificacion" width="1100" height="300" role="img" aria-label="Gráfica interactiva de entrada y salida"></canvas>
+            <div class="leyenda-grafica">
+                <span class="leyenda-azul">━ Entrada x(t)</span>
+                <span class="leyenda-naranja">━ Salida y(t)</span>
+            </div>
+            <p id="explicacionInteractiva" class="explicacion-grafica" aria-live="polite"></p>
+        </section>
+
+        <section class="diapositiva-cierre">
+            <p class="etiqueta">GRUPO 6 · SEÑALES Y SISTEMAS</p>
+            <h2>CIERRE</h2>
+            <p class="cierre-frase">Una misma señal puede revelar propiedades distintas según cómo el sistema la transforma.</p>
+            <div class="cierre-puntos">
+                <div><strong>CAUSALIDAD</strong><span>¿La salida necesita valores futuros?</span></div>
+                <div><strong>MEMORIA</strong><span>¿La salida depende de otros instantes?</span></div>
+                <div><strong>ESTABILIDAD</strong><span>¿Una entrada acotada produce una salida acotada?</span></div>
+            </div>
+            <p class="cierre-final">Gracias</p>
+            <p class="texto-secundario">Preguntas o comentarios</p>
+        </section>
+
     </div>
 </div>
 
