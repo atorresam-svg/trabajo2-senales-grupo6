@@ -272,3 +272,27 @@
         gap: 15px;
     }
 }
+.reveal { font-size: 30px; }
+
+.reveal h2 { font-size: 1.5em; margin-bottom: 0.3em; }
+.reveal h4 { font-size: 1em; margin: 0.3em 0; }
+.reveal p  { margin: 0.4em 0; }
+
+/* Ecuaciones MathJax más compactas */
+.reveal mjx-container { font-size: 85% !important; margin: 0.2em 0 !important; }
+
+/* Bloques que no se salgan de la diapositiva */
+.reveal .bloque-ejemplo,
+.reveal .bloque-ecuacion {
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0.6em 1em;
+    margin: 0.5em auto;
+}
+
+/* Listas y texto sin desbordar */
+.reveal ul { display: block; margin: 0.3em auto; }
+.reveal section { overflow-wrap: break-word; }
+
+/* Gráficas adaptables */
+.reveal canvas { max-width: 100%; height: auto; }
