@@ -383,3 +383,120 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+
+function iniciarLaboratorioClasificacion() {
+    const propiedad = document.getElementById("propiedadInteractiva");
+    const sistema = document.getElementById("sistemaInteractivo");
+    const amplitud = document.getElementById("amplitudInteractiva");
+    const amplitudValor = document.getElementById("amplitudInteractivaValor");
+    const retardo = document.getElementById("retardoInteractivo");
+    const retardoValor = document.getElementById("retardoInteractivoValor");
+    const controlRetardo = document.getElementById("controlRetardo");
+    const formula = document.getElementById("formulaInteractiva");
+    const explicacion = document.getElementById("explicacionInteractiva");
+    const canvas = document.getElementById("graficaInteractiva");
+    if (!propiedad || !sistema || !canvas) return;
+
+    const opciones = {
+        causalidad: [["causal", "Causal: presente y pasado"], ["no-causal", "No causal: valor futuro"]],
+        memoria: [["sin-memoria", "Sin memoria: solo presente"], ["con-memoria", "Con memoria: usa el pasado"]],
+        estabilidad: [["estable", "Estable BIBO"], ["inestable", "Inestable BIBO"]]
+    };
+
+    function actualizarOpciones() {
+        sistema.replaceChildren(...opciones[propiedad.value].map(([value, label]) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = label;
+            return option;
+        }));
+        controlRetardo.hidden = propiedad.value === "estabilidad";
+        dibujar();
+    }
+
+    function dibujar() {
+        const ctx = canvas.getContext("2d");
+        const w = canvas.width, h = canvas.height;
+        const a = Number(amplitud.value), tau = Number(retardo.value);
+        const tipo = propiedad.value, caso = sistema.value;
+        const xmin = -2, xmax = 4;
+        const ymin = tipo === "estabilidad" && caso === "inestable" ? -2 * a : -0.5;
+        const ymax = tipo === "estabilidad" ? Math.max(4, a * 4) : Math.max(2.5, a * 2.5);
+        const left = 62, right = 24, top = 24, bottom = 42;
+        const X = t => left + (t - xmin) / (xmax - xmin) * (w - left - right);
+        const Y = y => h - bottom - (y - ymin) / (ymax - ymin) * (h - top - bottom);
+        const x = t => tipo === "estabilidad" ? a : ((t >= 0 && t < 1) ? a : 0);
+        let y, formulaTexto, detalle;
+
+        if (tipo === "causalidad" && caso === "causal") {
+            y = t => x(t) + x(t - tau);
+            formulaTexto = `y(t) = x(t) + x(t − ${tau})`;
+            detalle = "La salida combina el valor actual con uno pasado; no necesita conocer el futuro.";
+        } else if (tipo === "causalidad") {
+            y = t => x(t + tau);
+            formulaTexto = `y(t) = x(t + ${tau})`;
+            detalle = `La salida en t necesita la entrada futura x(t + ${tau}); por eso no es causal.`;
+        } else if (tipo === "memoria" && caso === "sin-memoria") {
+            y = t => 2 * x(t);
+            formulaTexto = "y(t) = 2x(t)";
+            detalle = "La salida depende solo del valor presente; no necesita almacenar valores anteriores.";
+        } else if (tipo === "memoria") {
+            y = t => x(t) + x(t - tau);
+            formulaTexto = `y(t) = x(t) + x(t − ${tau})`;
+            detalle = "La salida usa también un valor pasado; puede continuar después del pulso de entrada.";
+        } else if (caso === "estable") {
+            y = t => 2 * x(t);
+            formulaTexto = "y(t) = 2x(t)";
+            detalle = `La entrada constante está acotada en ${a}; la salida permanece acotada en ${2 * a}.`;
+        } else {
+            y = t => (t + 2) * x(t);
+            formulaTexto = "y(t) = t x(t)";
+            detalle = "La entrada permanece acotada, pero la salida crece con el tiempo; el sistema no es BIBO estable.";
+        }
+
+        amplitudValor.value = a; amplitudValor.textContent = a;
+        retardoValor.value = tau; retardoValor.textContent = tau;
+        formula.textContent = formulaTexto;
+        explicacion.textContent = detalle;
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "#111827"; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = "#263548"; ctx.lineWidth = 1;
+        for (let i = 0; i <= 4; i++) {
+            const gy = top + i * (h - top - bottom) / 4;
+            ctx.beginPath(); ctx.moveTo(left, gy); ctx.lineTo(w - right, gy); ctx.stroke();
+        }
+        ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(left, Y(0)); ctx.lineTo(w - right, Y(0)); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(X(0), top); ctx.lineTo(X(0), h - bottom); ctx.stroke();
+        ctx.fillStyle = "#cbd5e1"; ctx.font = "15px Arial"; ctx.textAlign = "center";
+        for (let i = 0; i <= 6; i++) ctx.fillText(String(i - 2), X(i - 2), h - 14);
+        ctx.textAlign = "left"; ctx.fillText("Amplitud", 8, 18); ctx.fillText("Tiempo (t)", w - 110, h - 5);
+
+        function curva(color, fn) {
+            ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = 4;
+            const steps = 1000; let previous = null;
+            for (let i = 0; i <= steps; i++) {
+                const t = xmin + i / steps * (xmax - xmin), value = fn(t);
+                const px = X(t), py = Y(Math.max(ymin, Math.min(ymax, value)));
+                if (previous === null) ctx.moveTo(px, py);
+                else if (Math.abs(value - previous) > (ymax - ymin) * 0.12) {
+                    ctx.lineTo(px, Y(previous)); ctx.lineTo(px, py);
+                } else ctx.lineTo(px, py);
+                previous = value;
+            }
+            ctx.stroke();
+        }
+        curva("#38bdf8", x);
+        curva("#fb923c", y);
+    }
+
+    propiedad.addEventListener("change", actualizarOpciones);
+    sistema.addEventListener("change", dibujar);
+    amplitud.addEventListener("input", dibujar);
+    retardo.addEventListener("input", dibujar);
+    window.addEventListener("resize", dibujar);
+    actualizarOpciones();
+}
+
+document.addEventListener("DOMContentLoaded", iniciarLaboratorioClasificacion);
