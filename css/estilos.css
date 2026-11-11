@@ -296,3 +296,40 @@
 
 /* Gráficas adaptables */
 .reveal canvas { max-width: 100%; height: auto; }
+/* ===== Ajuste de tamaños para que no se corte ===== */
+.reveal { font-size: 26px; }
+
+.reveal h2 {
+    font-size: 1.5em !important;
+    margin: 0 0 0.3em 0 !important;
+}
+
+.reveal h4 {
+    font-size: 1em !important;
+    margin: 0.2em 0 !important;
+}
+
+.reveal p {
+    margin: 0.3em 0 !important;
+    line-height: 1.25 !important;
+}
+
+/* Ecuaciones más pequeñas y compactas */
+.reveal mjx-container {
+    font-size: 70% !important;
+    margin: 0.1em 0 !important;
+}
+
+/* Bloques con menos espacio interno */
+.reveal .bloque-ecuacion,
+.reveal .bloque-ejemplo {
+    padding: 0.4em 1em !important;
+    margin: 0.4em auto !important;
+    box-sizing: border-box;
+    max-width: 95%;
+}
+
+.reveal .resultado {
+    font-size: 1em !important;
+    margin: 0.3em 0 0 0 !important;
+}
